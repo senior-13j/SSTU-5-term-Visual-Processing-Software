@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="style.css" />
+    <title></title>
+  </head>
+
+  <body>
+    <div class="container" id="cont">
+      <div style="background-color: rgb(0,0,0); width: 6px;"></div>
+    </div>
+    
+    <script>
+      cont.onmouseover = function(e) {
+        let target = e.target;
+        let field = document.querySelector(".field");
+        let maxNum = 16383;
+        let position = e.clientX;
+        let percent = position / 999;
+        let num = +parseInt(percent * maxNum).toString(2);
+        if (String(num).length < 14) {
+          let newStr = "";
+          for (let i = 0; i <= 14 - String(num).length - 1; i++) {
+            newStr += 0;
+          }
+          num = num.toString();
+          num = newStr + num;
+        }
+        field.innerHTML = `Цвет:  ${
+          target.style.backgroundColor
+        } (Яркость пикселя: ${(percent * maxNum).toFixed(
+          0
+        )}), 14-битный код: ${num}`;
+      };
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  display: flex;
+  justify-content: space-between;
+}
+.container {
+  background-color: black;
+  height: 200px;
+  width: 1000px;
+  margin-top: 100px;
+  display: flex;
+}
+.innerdiv {
+  width: 20px;
+  min-height: 200px;
+}
+.field {
+  align-self: center;
+  border: 3px solid black;
+  border-radius: 20px;
+  margin-top: 100px;
+  margin-right: 20px;
+  padding: 10px;
+  width: 320px;
+  height: 200px;
+  font-size: 20px;
+}
