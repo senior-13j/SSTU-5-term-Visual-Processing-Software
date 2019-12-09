@@ -167,7 +167,7 @@ public class POOVD3 extends JComponent {
                             } else {
                                 c = Color.black;
                             }
-                            for (int z = 0; z <= N; z++) {
+                            for (int z = 0; z < N; z++) {
                                 lupa.addLine(i, j + z, i + N, j + z, c);
                             }
                             i += N;
@@ -189,7 +189,7 @@ public class POOVD3 extends JComponent {
                         j = 0;
                     }
                     int[][] b = new int[lupa.getHeight()][lupa.getWidth()];
-                    resample(a.length, a[0].length, b.length, b[0].length, a, b);
+                    resample(a, b);
                     for (int k = 0; k < lupa.getHeight(); k++) {
                         for (int l = 0; l < lupa.getWidth(); l++) {
                             lupa.addLine(l, k, l, k, new Color(b[k][l], b[k][l], b[k][l]));
@@ -202,7 +202,11 @@ public class POOVD3 extends JComponent {
         testFrame.setVisible(true);
     }
 
-    static void resample(int oldw, int oldh, int neww, int newh, int a[][], int b[][]) {
+    static void resample(int a[][], int b[][]) {
+        int oldWidth = a.length;
+        int oldHeight = a[0].length;
+        int newWidth = b.length;
+        int newHeight = b[0].length;
         int i, j;
         int h, w;
         float t;
@@ -211,31 +215,30 @@ public class POOVD3 extends JComponent {
         float d1, d2, d3, d4;
         int p1, p2, p3, p4;
         /* Окрестные пикселы */
-        for (j = 0; j < newh; j++) {
-            tmp = (float) (j) / (float) (newh - 1) * (oldh - 1);
+        for (j = 0; j < newHeight; j++) {
+            // tmp - точка в пределах локальной области (в одном из пикселей)
+            // w и h - начало координат локальной системы координат
+            tmp = (float) (j) / (float) (newHeight - 1) * (oldHeight - 1);
             h = (int) tmp;
             if (h < 0) {
                 h = 0;
             } else {
-                if (h >= oldh - 1) {
-                    h = oldh - 2;
+                if (h >= oldHeight - 1) {
+                    h = oldHeight - 2;
                 }
             }
             u = tmp - h;
-
-            for (i = 0; i < neww; i++) {
-
-                tmp = (float) (i) / (float) (neww - 1) * (oldw - 1);
+            for (i = 0; i < newWidth; i++) {
+                tmp = (float) (i) / (float) (newWidth - 1) * (oldWidth - 1);
                 w = (int) tmp;
                 if (w < 0) {
                     w = 0;
                 } else {
-                    if (w >= oldw - 1) {
-                        w = oldw - 2;
+                    if (w >= oldWidth - 1) {
+                        w = oldWidth - 2;
                     }
                 }
                 t = tmp - w;
-
                 /* Коэффициенты */
                 d1 = (1 - t) * (1 - u);
                 d2 = t * (1 - u);
@@ -243,12 +246,13 @@ public class POOVD3 extends JComponent {
                 d4 = (1 - t) * u;
 
                 /* Окрестные пиксели: a[i][j] */
+                // вершины четырех окружающий пикселей
                 p1 = a[h][w];
                 p2 = a[h][w + 1];
                 p3 = a[h + 1][w + 1];
                 p4 = a[h + 1][w];
 
-                /* Новый пиксел*/
+                /* Новый пиксел */
                 b[j][i] = (int) (p1 * d1 + p2 * d2 + p3 * d3 + p4 * d4);
             }
         }
