@@ -1,4 +1,4 @@
-package poovd3;
+package pack;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,7 +25,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 
-public class POOVD3 extends JComponent {
+public class Lab3 extends JComponent {
 
     private static class Line {
 
@@ -65,12 +65,13 @@ public class POOVD3 extends JComponent {
     static int[][] Picture;
 
     public static void main(String[] args) throws IOException {
-        JFrame testFrame = new JFrame();
-        testFrame.setPreferredSize(new Dimension(900, 600));
-        testFrame.setResizable(false);
-        testFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        POOVD3 file = new POOVD3();
-        POOVD3 lupa = new POOVD3();
+        JFrame ourFrame = new JFrame();
+        ourFrame.setPreferredSize(new Dimension(1400, 900));
+        ourFrame.setResizable(false);
+        ourFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        ourFrame.setLocation(100, 50);
+        Lab3 file = new Lab3();
+        Lab3 lupa = new Lab3();
         file.setPreferredSize(new Dimension(500, 3000));
         lupa.setPreferredSize(new Dimension(300, 300));
         JScrollPane scroll = new JScrollPane();
@@ -88,22 +89,22 @@ public class POOVD3 extends JComponent {
         JPanel panel2 = new JPanel();
         JCheckBox check = new JCheckBox();
         check.setText("Интерполировать");
-        JComboBox koef = new JComboBox();
+        JComboBox selectCoef = new JComboBox();
         JLabel lb = new JLabel();
-        koef.setToolTipText("Коэффициент увеличения");
-        koef.addItem(3);
-        koef.addItem(5);
-        koef.setSelectedIndex(0);
-        panel2.add(koef);
+        selectCoef.setToolTipText("Коэффициент увеличения");
+        selectCoef.addItem(3);
+        selectCoef.addItem(5);
+        selectCoef.setSelectedIndex(0);
+        panel2.add(selectCoef);
         panel2.add(check);
         panel.setPreferredSize(new Dimension(350, 600));
         panel.setLayout(new FlowLayout());
         panel.add(list);
         panel.add(panel2);
         panel.add(lupa);
-        panel.add(lb);
-        testFrame.getContentPane().add(scroll);
-        testFrame.getContentPane().add(panel, BorderLayout.EAST);
+        //panel.add(lb);
+        ourFrame.getContentPane().add(scroll, BorderLayout.EAST);
+        ourFrame.getContentPane().add(panel);
 
         list.addListSelectionListener((ListSelectionEvent e) -> {
             if (list.getSelectedIndex() == -1) {
@@ -138,10 +139,10 @@ public class POOVD3 extends JComponent {
                     }
                 }
             } catch (IOException ex) {
-                Logger.getLogger(POOVD3.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Lab3.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
-        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //
         //Метод лупы
         //
         file.addMouseMotionListener(new MouseMotionAdapter() {
@@ -150,7 +151,7 @@ public class POOVD3 extends JComponent {
                 if (Picture == null) {
                     return;
                 }
-                N = (int) koef.getSelectedItem();
+                N = (int) selectCoef.getSelectedItem();
                 int X = e.getX();
                 int Y = e.getY();
                 if (X > 0 && Y > 0 && Y < h && X < w) {
@@ -189,7 +190,7 @@ public class POOVD3 extends JComponent {
                         j = 0;
                     }
                     int[][] b = new int[lupa.getHeight()][lupa.getWidth()];
-                    resample(a, b);
+                    interpolate(a, b);
                     for (int k = 0; k < lupa.getHeight(); k++) {
                         for (int l = 0; l < lupa.getWidth(); l++) {
                             lupa.addLine(l, k, l, k, new Color(b[k][l], b[k][l], b[k][l]));
@@ -198,11 +199,11 @@ public class POOVD3 extends JComponent {
                 }
             }
         });
-        testFrame.pack();
-        testFrame.setVisible(true);
+        ourFrame.pack();
+        ourFrame.setVisible(true);
     }
 
-    static void resample(int a[][], int b[][]) {
+    static void interpolate(int a[][], int b[][]) {
         int oldWidth = a.length;
         int oldHeight = a[0].length;
         int newWidth = b.length;
